@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PlatformHQ - The Complete Client Experience</title>
+    <!-- Tailwind CSS for modern, polished UI -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800">
+
+    <!-- Header Navigation with strict view controls -->
+    <nav class="bg-indigo-600 text-white p-4 sticky top-0 z-50 shadow-md">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <div class="flex items-center gap-2">
+                <span class="text-2xl font-black">HQ</span>
+                <span class="text-xl font-medium">CoachConnect</span>
+            </div>
+            <div class="space-x-2">
+                <!-- In a real app, only authenticated coaches see this button -->
+                <button id="showCoachHQBtn" onclick="toggleView('coach')" class="bg-white text-indigo-600 px-4 py-1 rounded-full text-xs font-semibold shadow hover:bg-gray-100 hidden">Coach Analytics HQ</button>
+                <button id="showClientPanelBtn" onclick="toggleView('client')" class="bg-indigo-700 text-white px-4 py-1 rounded-full text-xs font-semibold hover:bg-indigo-800">Client Panel</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- MAIN CONTENT AREA -->
+    <main class="max-w-7xl mx-auto p-4 md:p-8 grid grid-cols-1 md:grid-cols-[1fr,2fr] gap-8">
+
+        <!-- ============================================= -->
+        <!-- CLIENT PANEL SECTION (Strict Data Entry) -->
+        <!-- ============================================= -->
+        <section id="clientPortal" class="space-y-6">
+            <div class="bg-white p-6 rounded-2xl shadow border border-gray-100">
+                <h2 class="text-2xl font-bold text-gray-900 flex items-center gap-2">
+                    <svg class="w-7 h-7 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
+                    Client Update Panel
+                </h2>
+                <p class="text-gray-500 text-sm mt-1">Submit your daily verification updates.</p>
+                <select id="activeClientSelector" class="w-full mt-4 p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+                    <option value="Alex Johnson">Alex Johnson</option>
+                    <option value="Sarah Smith">Sarah Smith</option>
+                </select>
+            </div>
+
+            <!-- FOUR PILLARS LOGGING MODULES (Piecemeal Inputs) -->
+            <div class="bg-white p-6 rounded-2xl shadow border border-gray-100 space-y-6">
+                
+                <!-- 1) MORNING BODYWEIGHT (Empty Stomach Check) -->
+                <div class="p-4 rounded-xl border border-gray-100">
+                    <label class="block text-sm font-semibold text-gray-700 flex items-center gap-2 mb-2">
+                        <svg class="w-5 h-5 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 6l3 12h12l3-12H3z M6 18v2a1 1 0 001 1h10a1 1 0 001-1v-2H6z M9 6V4a2 2 0 012-2h2a2 2 0 012 2v2"></path></svg>
+                        Morning Bodyweight (Empty Stomach Required)
+                    </label>
+                    <input type="number" id="bodyWeight" step="0.1" placeholder="--- kg/lbs" class="w-full p-3 border rounded-xl focus:ring-1 focus:ring-amber-400 focus:outline-none text-sm mb-2">
+                    <div class="flex items-center gap-2 mb-3">
+                        <input type="checkbox" id="emptyStomachCheck" class="w-4 h-4 text-amber-500 border-gray-300 rounded focus:ring-amber-400">
+                        <label for="emptyStomachCheck" class="text-xs text-gray-500 italic">Scale Photo Attached (Honesty Verification)</label>
+                    </div>
+                    <!-- Simplified placeholder for combined Image submission -->
+                    <button onclick="logEntry('⚖️ Bodyweight', {weight: 78.5, emptyStomach: true})" class="w-full bg-amber-500 text-white font-semibold py-2.5 rounded-lg text-sm hover:bg-amber-600 transition">Update Weight + Photo</button>
+                </div>
+
+                <!-- 2) DAILY STEPS -->
+                <div class="p-4 rounded-xl border border-gray-100">
+                    <label class="block text-sm font-semibold text-gray-700 flex items-center gap-2 mb-2">
+                        <svg class="w-5 h-5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 5H19V11H13V5Z M13 13H19V19H13V13Z M5 5H11V11H5V5Z M5 13H11V19H5V13Z"></path></svg>
+                        Daily Steps (Screenshot Proof)
+                    </label>
+                    <input type="number" id="stepCount" placeholder="--- steps" class="w-full p-3 border rounded-xl focus:ring-1 focus:ring-blue-400 focus:outline-none text-sm mb-3">
+                    <button onclick="logEntry('👟 Daily Steps', {steps: 12000})" class="w-full bg-blue-500 text-white font-semibold py-2.5 rounded-lg text-sm hover:bg-blue-600 transition">Update Steps + Photo</button>
+                </div>
+
+                <!-- 3) WORKOUT UPDATE (with Notes/PRs) -->
+                <div class="p-4 rounded-xl border border-gray-100">
+                    <label class="block text-sm font-semibold text-gray-700 flex items-center gap-2 mb-2">
+                        <svg class="w-5 h-5 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"></path></svg>
+                        Workout Update (Gym Selfie/Log Proof)
+                    </label>
+                    <input type="text" id="workoutOfDay" placeholder="Workout session (e.g., Upper Body A)" class="w-full p-3 text-sm border rounded-xl focus:ring-1 focus:ring-emerald-400 focus:outline-none mb-2">
+                    <textarea id="workoutNotes" placeholder="Notes, PRs, or details..." class="w-full p-3 text-sm border rounded-xl focus:ring-1 focus:ring-emerald-400 focus:outline-none mb-3" rows="2"></textarea>
+                    <button onclick="logEntry('🏋️ Workout Update', {session: 'Upper A', notes: 'Hit PR on Squat!'})" class="w-full bg-emerald-500 text-white font-semibold py-2.5 rounded-lg text-sm hover:bg-emerald-600 transition">Update Workout + Photo</button>
+                </div>
+
+                <!-- 4) MEAL PICS (Multiple Daily Logs possible) -->
+                <div class="p-4 rounded-xl border border-gray-100">
+                    <label class="block text-sm font-semibold text-gray-700 flex items-center gap-2 mb-2">
+                        <svg class="w-5 h-5 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                        Meal Pics (Post multiple throughout the day)
+                    </label>
+                    <div class="flex items-center gap-2 border-2 border-dashed border-gray-100 rounded-xl p-3 bg-gray-50 mb-3">
+                        <span class="text-3xl text-gray-300">🥗</span>
+                        <div>
+                            <span class="block text-sm font-medium text-gray-500">Meal or Snack Photo Required</span>
+                            <span class="block text-xs text-gray-400">Clients post separate logs for every meal.</span>
+                        </div>
+                    </div>
+                    <button onclick="logEntry('🥗 Meal Log', {meal: 'uploaded_dish.jpg', type: 'Breakfast'})" class="w-full bg-indigo-600 text-white font-semibold py-2.5 rounded-lg text-sm hover:bg-indigo-700 transition">Post Meal Pic</button>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- ============================================= -->
+        <!-- COACH DASHBOARD (Authenticated Access Only) -->
+        <!-- ============================================= -->
+        <section id="coachAnalytics" class="space-y-6 hidden md:block">
+            <div class="bg-white p-6 rounded-2xl shadow border border-gray-100">
+                <div class="sm:flex sm:justify-between sm:items-center">
+                    <div>
+                        <h2 class="text-2xl font-bold text-gray-900 flex items-center gap-2">
+                            <svg class="w-7 h-7 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
+                            Coach Analytics HQ
+                        </h2>
+                        <p class="text-gray-500 text-sm mt-1">Periodic summary and live client verification stream.</p>
+                    </div>
+                    <div class="mt-4 sm:mt-0 flex bg-indigo-50 p-1 rounded-xl text-xs font-semibold">
+                        <button onclick="filterMatrix('weekly')" class="bg-white text-indigo-600 px-3 py-1.5 rounded-lg shadow-sm">Past Week</button>
+                        <button onclick="filterMatrix('monthly')" class="text-indigo-600 px-3 py-1.5 rounded-lg hover:bg-indigo-100">Past Month</button>
+                    </div>
+                </div>
+                <!-- Simulated Goal Indicator from image_11.png prompt -->
+                <div class="mt-6 flex items-center gap-4 bg-green-50 p-3 rounded-xl border border-green-100">
+                    <span class="text-3xl">👟</span>
+                    <div>
+                        <span class="block text-xl font-bold text-green-900">11,850</span>
+                        <span class="block text-xs text-green-600">Avg. Daily Steps - All Clients (Weekly)</span>
+                    </div>
+                    <span class="ml-auto text-xs font-bold text-green-600 bg-white px-2.5 py-1 rounded-full">+6% vs. target</span>
+                </div>
+            </div>
+
+            <!-- Periodic Summary Table -->
+            <div class="bg-white p-6 rounded-2xl shadow border border-gray-100">
+                <h3 class="text-lg font-semibold text-gray-700 tracking-tight mb-4">Master Summary HQ</h3>
+                <div class="overflow-x-auto max-h-[300px] overflow-y-auto pr-2">
+                    <table class="w-full text-left border-collapse text-sm">
+                        <thead class="sticky top-0 bg-white z-10">
+                            <tr class="border-b border-gray-200 bg-gray-50">
+                                <th class="p-3 text-gray-400 text-[11px] uppercase tracking-wider font-bold">Client</th>
+                                <th class="p-3 text-gray-400 text-[11px] uppercase tracking-wider font-bold">Avg. Weight</th>
+                                <th class="p-3 text-gray-400 text-[11px] uppercase tracking-wider font-bold">Avg. Steps</th>
+                                <th class="p-3 text-gray-400 text-[11px] uppercase tracking-wider font-bold">Workouts</th>
+                                <th class="p-3 text-gray-400 text-[11px] uppercase tracking-wider font-bold">Meal Logs</th>
+                            </tr>
+                        </thead>
+                        <tbody id="summaryMatrixTableBody" class="divide-y divide-gray-100">
+                            <!-- Pre-populated simulation from image_11.png requirements -->
+                            <tr class="hover:bg-gray-50">
+                                <td class="p-3 font-semibold text-gray-900">Alex Johnson</td>
+                                <td class="p-3">78.5 kg <span class="text-[10px] text-gray-400">(Consistent)</span></td>
+                                <td class="p-3 font-bold text-gray-900">12,100</td>
+                                <td class="p-3 text-emerald-600 font-bold pl-8">🏋️ 5</td>
+                                <td class="p-3 text-indigo-600 font-bold pl-8">🥗 21</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Live Verification Stream -->
+            <div class="bg-white p-6 rounded-2xl shadow border border-gray-100">
+                <h3 class="text-lg font-semibold text-gray-700 tracking-tight mb-4">Live Verification Stream</h3>
+                <div id="liveStream" class="space-y-4 max-h-[400px] overflow-y-auto pr-3">
+                    <!-- Dynamic client entries with photo thumbnails will appear here -->
+                    <p class="text-gray-400 text-center py-8">Awaiting real-time client verification updates...</p>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="text-center py-6 border-t mt-12 bg-gray-100 text-xs text-gray-400">
+        PlatformHQ © 2023 | User-Friendly Tracking Portal
+    </footer>
+
+    <!-- Firebase Firestore/Real-Time Sync logic simulation -->
+    <script>
+        // Database simulation (uses LocalStorage for instant testing)
+        let clientLogs = JSON.parse(localStorage.getItem('hqClientLogs')) || [];
+
+        // view controls
+        function toggleView(view) {
+            const clientPanel = document.getElementById('clientPortal');
+            const coachHQ = document.getElementById('coachAnalytics');
+            const clientBtn = document.getElementById('showClientPanelBtn');
+            const coachBtn = document.getElementById('showCoachHQBtn');
+
+            if (view === 'client') {
+                clientPanel.classList.remove('hidden');
+                coachHQ.classList.add('hidden');
+                coachHQ.classList.add('md:block'); // Ensure desktop layout
+                
+                clientBtn.className = "bg-white text-indigo-600 px-4 py-1 rounded-full text-xs font-semibold shadow hover:bg-gray-100";
+                coachBtn.className = "bg-indigo-700 text-white px-4 py-1 rounded-full text-xs font-semibold hover:bg-indigo-800 hidden"; // Ensure private view is hidden in client mode
+            } else {
+                coachHQ.classList.remove('hidden');
+                coachHQ.classList.add('block');
+                clientPanel.classList.add('hidden');
+                
+                coachBtn.className = "bg-white text-indigo-600 px-4 py-1 rounded-full text-xs font-semibold shadow hover:bg-gray-100 hidden"; // Hidden button when viewing HQ
+                clientBtn.className = "bg-indigo-700 text-white px-4 py-1 rounded-full text-xs font-semibold hover:bg-indigo-800";
+            }
+        }
+
+        function getActiveClient() {
+            return document.getElementById('activeClientSelector').value;
+        }
+
+        // Live Real-Time database sync function (Simulated)
+        function logEntry(type, data) {
+            alert(`Simulation: Post ${type} for ${getActiveClient()} complete. Live pic capture, photo upload to Cloudinary, and Firestore sync occur here in production.`);
+            
+            const entry = {
+                id: Date.now(),
+                client: getActiveClient(),
+                timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+                type: type,
+                ...data
+            };
+            clientLogs.unshift(entry); // Newest at top
+            localStorage.setItem('hqClientLogs', JSON.stringify(clientLogs));
+            renderLiveStream();
+        }
+
+        // --- Coach Dashboard Functions ---
+
+        function renderLiveStream() {
+            const stream = document.getElementById('liveStream');
+            stream.innerHTML = '';
+            
+            if (clientLogs.length === 0) {
+                stream.innerHTML = '<p class="text-gray-400 text-center py-8">updates from clients will appear instantly below...</p>';
+                return;
+            }
+
+            clientLogs.forEach(log => {
+                let content = '';
+                let typeBg = 'bg-gray-100';
+                let typeTextColor = 'text-gray-700';
+
+                // Map specific log data to feed card formatting
+                switch (log.type) {
+                    case '🥗 Meal Log':
+                        content = `<img src="https://via.placeholder.com/60?text=Meal+Pic" class="w-12 h-12 rounded-lg border flex-shrink-0" onclick="alert('Viewing original meal photo verification...')"> 
+                                   <div class="flex-1">
+                                       <span class="block text-sm font-semibold text-gray-900">${log.client}</span>
+                                       <p class="text-xs text-indigo-600 italic">Honesty Verification dish pic submitted.</p>
+                                   </div>`;
+                        typeBg = 'bg-indigo-50';
+                        typeTextColor = 'text-indigo-800';
+                        break;
+                    case '🏋️ Workout Update':
+                        content = `<p><strong class="font-semibold text-emerald-900">${log.session}</strong></p>
+                                   <p class="text-xs text-emerald-700">Notes/PRs: ${log.notes || 'None logged'}</p>`;
+                        typeBg = 'bg-emerald-50';
+                        typeTextColor = 'text-emerald-800';
+                        break;
+                    case '👟 Daily Steps':
+                        content = `<p><strong class="text-xl font-bold text-blue-900">${Number(log.steps).toLocaleString()}</strong> steps <span class="text-xs text-blue-500">(Screenshot verified)</span></p>`;
+                        typeBg = 'bg-blue-50';
+                        typeTextColor = 'text-blue-800';
+                        break;
+                    case '⚖️ Bodyweight':
+                        content = `<p><strong class="text-xl font-bold text-amber-900">${log.weight}</strong> kg/lbs <span class="text-xs text-amber-600 ${log.emptyStomach ? '' : 'hidden'}">(Empty Stomach - Scale Photo Verified)</span></p>`;
+                        typeBg = 'bg-amber-50';
+                        typeTextColor = 'text-amber-800';
+                        break;
+                }
+
+                stream.innerHTML += `
+                    <div class="border border-gray-100 p-4 rounded-xl flex items-center gap-4 hover:shadow-sm transition hover:border-gray-200">
+                        <div class="flex-shrink-0 text-center">
+                            <span class="block text-2xl">👤</span>
+                            <span class="block text-[10px] text-gray-400 mt-1">${log.timestamp}</span>
+                        </div>
+                        <div class="flex-1 space-y-1">
+                            <div class="flex items-center gap-2">
+                                <span class="text-[10px] font-extrabold ${typeTextColor} ${typeBg} px-2 py-0.5 rounded uppercase tracking-wider">${log.type}</span>
+                            </div>
+                            <div class="flex items-center gap-3 text-sm text-gray-700">
+                                ${content}
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        // Period filter controls (Simulation logic)
+        function filterMatrix(range) {
+            alert(`Simulation: Master summary calculations for avg. weight/steps and cumulative workouts/meals are now filtered by the ${range} date range.`);
+        }
+
+        // Initial execution for simulated real-time connection
+        renderLiveStream();
+    </script>
+</body>
+</html>
